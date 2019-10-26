@@ -1,0 +1,23 @@
+#!/bin/bash
+#python MasterPlots_v1.py
+#python MasterPlots_v2.py
+#python MasterPlots_v3.py
+
+
+rm *.png
+python MasterPlots_v3.py
+#python FuelCost_v1.py
+#gthumb Fuel_Cost.png &
+
+gthumb DarkStarJr_Alt.png &
+#python MasterLogX_v1.py
+#gthumb Fleet_Alt.png &
+
+#convert DarkStarJr_Alt.png Comp3WM_Alt.png +append top.png
+#convert ExtremeDS_Alt.png Intmd4KB_Alt.png +append bot.png
+#convert top.png bot.png -append aa.png
+#gthumb aa.png &
+
+
+#python WhatIf_v1.py
+#gthumb ExtremeWM_Alt.png &
