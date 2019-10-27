@@ -81,15 +81,7 @@ def FlightLog_ExtremeDS():
             [10, "o", "yellow"       ],\
             [12, "v", "chocolate"    ]]
 
-    # Cost (circa 2019)
-    cost = [[355],\
-            [533],\
-            [379],\
-            [164],\
-            [316],\
-            [200]]
-
-    return [ttl,data,symb,cost]
+    return [ttl,data,symb]
 
 ###########################################################################
 # DarkStar Junior by WildMan, Maiden Flight May 13, 2017.
@@ -124,19 +116,7 @@ def FlightLog_DSJrWM():
             [10, "s", "lime"         ],\
             [10, "s", "orangered"    ]]
 
-    # Cost (circa 2019)
-    cost = [[57],\
-            [83],\
-            [83],\
-            [69],\
-            [109],\
-            [83],\
-            [113],\
-            [134],\
-            [73],\
-            [73]]
-
-    return [ttl,data,symb,cost]
+    return [ttl,data,symb]
 
 ###########################################################################
 #  Competitor 3 by WildMan, Maiden Flight November 2, 2013.
@@ -165,16 +145,7 @@ def FlightLog_Comp3WM():
             [10, "o", "saddlebrown"  ],\
             [12, "v", "aqua"         ]]
 
-    # Cost (circa 2019)
-    cost = [[134],\
-            [113],\
-            [123],\
-            [181],\
-            [65],\
-            [209],\
-            [114]]
-
-    return [ttl,data,symb,cost]
+    return [ttl,data,symb]
 
 ###########################################################################
 #  Intimidator 4 Kit Bash, Maiden Flight November 1, 2014.
@@ -207,15 +178,7 @@ def FlightLog_Intimidator4():
             [10, "o", "darkorange"   ],\
             [12, "v", "floralwhite"  ]]
 
-    # Cost (circa 2019)
-    cost = [[675],\
-            [480],\
-            #[480],\
-            [293],\
-            [533],\
-            [195]]
-
-    return [ttl,data,symb,cost]
+    return [ttl,data,symb]
 
 ###########################################################################
 # Gizmo XL DD by WildMan, Maiden Flight November 10, 2018.
@@ -232,37 +195,35 @@ def FlightLog_GizmoXLDD():
     # Marker size/type/color
     symb = [[10, "o", "saddlebrown"  ]]
 
-    # Cost (circa 2019)
-    cost = [[450]]
-
-    return [ttl,data,symb,cost]
+    return [ttl,data,symb]
 
 ###########################################################################
-# Fuel Cost - ALL
+# Altitude Plot - ALL
 ###########################################################################
-def FuelCost_ALL(fout,title):
+def AltCost_ALL(fout,title,aa,bb):
 
     # set titles
-    xtxt = r"Total Impulse (N-s)"
-    ytxt = r"Reload Price"
+    xtxt = r"Reload Price"
+    ytxt = r"Max Altitude AGL (ft)"
 
     # axes limits
     xmin = 0
-    xmax = 12000
+    xmax = 800
     ymin = 0
-    ymax = 1000
+    ymax = 24000
 
     # axes tick settings
-    nx = 13
-    ny = 11
+    nx = 9
+    ny = 13
     dx = (xmax-xmin)/(nx-1.0)
     dy = (ymax-ymin)/(ny-1.0)
     mx = 4
     my = 4
-    xticks = [r"0",r"1000",r"2000",r"3000",r"4000",r"5000",r"6000",\
-        r"7000",r"8000",r"9000",r"10000",r"11000",r"12000"]
-    yticks = [r"$0",r"$100",r"$200",r"$300",r"$400",r"$500",\
-        r"$600",r"$700",r"$800",r"$900",r"$1000"]
+    xticks = [r"$0",r"$100",r"$200",r"$300",r"$400",r"$500",r"$600",\
+        r"$700",r"$800"]
+    yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",r"10,000",\
+        r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000",\
+        r"24,000"]
 
     # figure settings
     figsize = (3,2.75)
@@ -352,167 +313,181 @@ def FuelCost_ALL(fout,title):
     # Make shaded regions for the different letters.
 
     # I-Range
-    itot=np.linspace(320.01,640.0)
+    i1 = aa*320.01+bb
+    i2 = aa*640.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='slategrey',label='_nolegend_')
-    plt.text(0.4*(320.01+640.0),900,r'I',fontsize=14,family=family,\
+    plt.text(0.5*(i1+i2),22000,r'I',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # J-Range
-    itot=np.linspace(640.01,1280.0)
+    i1 = aa*640.01+bb
+    i2 = aa*1280.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='mediumblue',label='_nolegend_')
-    plt.text(0.5*(640.01+1100.0),900,r'J',fontsize=14,family=family,\
+    plt.text(0.5*(i1+i2),22000,r'J',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # K-Range
-    itot=np.linspace(1280.01,2560.0)
+    i1 = aa*1280.01+bb
+    i2 = aa*2560.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='turquoise',label='_nolegend_')
-    plt.text(0.5*(1280.01+2200.0),900,r'K',fontsize=14,family=family,\
+    plt.text(0.5*(i1+i2),22000,r'K',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # L-Range
-    itot=np.linspace(2560.01,5120.0)
+    i1 = aa*2560.01+bb
+    i2 = aa*5120.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='chartreuse',label='_nolegend_')
-    plt.text(0.5*(2560.01+5000),900,r'L',fontsize=14,family=family,\
+    plt.text(0.5*(i1+i2),22000,r'L',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # M-Range
-    itot=np.linspace(5120.01,10240.0)
+    i1 = aa*5120.01+bb
+    i2 = aa*10240.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='gold',label='_nolegend_')
-    plt.text(0.5*(5120.01+10240.0),900,r'M',fontsize=14,family=family,\
+    plt.text(0.5*(i1+i2),22000,r'M',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # N-Range
-    itot=np.linspace(10240.01,12000.0)
+    i1 = aa*10240.01+bb
+    i2 = aa*18000.0+bb
+    itot=np.linspace(i1,i2)
     ylow=itot-1.e6
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='orangered',label='_nolegend_')
-    plt.text(0.5*(10240.01+11500),900,r'N',fontsize=14,family=family,\
+    plt.text(725,22000,r'N',fontsize=14,family=family,\
         color='k',fontweight='bold')
 
     # Scatter Plots (different symbols)
     k=0
-    lb=4000
-    ub=11000
+    lb=aa*4000+bb
+    ub=aa*11000+bb
     linecolor='ivory'
     rlabel='rocket'
 
-    # Total number of data points
-    ntot=0
-    [ttl,data,symb,cost] = FlightLog_DSJrWM()
-    ntot=ntot+len(cost)
-    [ttl,data,symb,cost] = FlightLog_Comp3WM()
-    ntot=ntot+len(cost)
-    [ttl,data,symb,cost] = FlightLog_ExtremeDS()
-    ntot=ntot+len(cost)
-    [ttl,data,symb,cost] = FlightLog_Intimidator4()
-    ntot=ntot+len(cost)
-    [ttl,data,symb,cost] = FlightLog_GizmoXLDD()
-    ntot=ntot+len(cost)
+    # Loop twice to render the correct order
+    for jj in range(2):
 
-    x_all=np.zeros(ntot)
-    y_all=np.zeros(ntot)
+        # Loop over rocket kits (k)
+        for k in range(5):
 
-    # Loop over rocket kits (k)
-    jj = 0
-    for k in range(5):
+            if k==0:
+                [ttl,data,symb] = FlightLog_DSJrWM()
+                lb = aa*400+bb
+                ub = aa*1600+bb
+                linecolor='red'
+                rlabel='Darkstar Jr.'
+            if k==1:
+                [ttl,data,symb] = FlightLog_Comp3WM()
+                lb = aa*600+bb
+                ub = aa*2600+bb
+                linecolor='ivory'
+                rlabel='Competitor 3'
+            if k==2:
+                [ttl,data,symb] = FlightLog_ExtremeDS()
+                lb = aa*1600+bb
+                ub = aa*9000+bb
+                linecolor='black'
+                rlabel='Extreme Darkstar'
+            if k==3:
+                [ttl,data,symb] = FlightLog_Intimidator4()
+                lb = aa*2000+bb
+                ub = aa*10200+bb
+                linecolor='orangered'
+                rlabel='Intimidator 4 (Kit Bash)'
+            if k==4:
+                [ttl,data,symb] = FlightLog_GizmoXLDD()
+                rlabel='_nolegend_'
 
-        if k==0:
-            [ttl,data,symb,cost] = FlightLog_DSJrWM()
-            lb = 400
-            ub = 1600
-            linecolor='red'
-            rlabel='Darkstar Jr.'
-        if k==1:
-            [ttl,data,symb,cost] = FlightLog_Comp3WM()
-            lb = 600
-            ub = 2600
-            linecolor='ivory'
-            rlabel='Competitor 3'
-        if k==2:
-            [ttl,data,symb,cost] = FlightLog_ExtremeDS()
-            lb = 1600
-            ub = 9000
-            linecolor='black'
-            rlabel='Extreme Darkstar'
-        if k==3:
-            [ttl,data,symb,cost] = FlightLog_Intimidator4()
-            lb = 2000
-            ub = 10200
-            linecolor='orangered'
-            rlabel='Redshift'
-        if k==4:
-            [ttl,data,symb,cost] = FlightLog_GizmoXLDD()
-            rlabel='_nolegend_'
+            # Flight Data
+            nf=0
+            for flight in data:
+                nf=nf+1
+            print "There are ",nf," flights in the databse."
+            xdat=np.zeros(nf)
+            ydat=np.zeros(nf)
+            ii=0
+            for flight in data:
+                xdat[ii]=aa*flight[5]+bb
+                ydat[ii]=flight[7]
+                ii+=1
 
-        # Flight Data
-        nf=0
-        for flight in data:
-            nf=nf+1
-        print "There are ",nf," flights in the databse."
-        xdat=np.zeros(nf)
-        ydat=np.zeros(nf)
-        ii=0
-        for flight in data:
-            xdat[ii]=flight[5]
-            #ydat[ii]=flight[7]
-            ydat[ii]=cost[ii][0]
-            x_all[jj]=flight[5]
-            y_all[jj]=cost[ii][0]
-            ii+=1
-            jj+=1
+            # Curve Fit
+            # slope, intercept, r_value, p_value, std_err
+            if nf>1 and jj==0:
+                [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
+                xfit=np.linspace(lb,ub)
+                yfit=np.multiply(xfit,m)+b
 
-        # Loop over flights in data (i)
-        i=0
-        for flight in data:
+                outline=mpe.withStroke(linewidth=4.0,foreground='black')
+                plt.plot(xfit,yfit,'k-',color=linecolor,linewidth=2.0,\
+                    label=rlabel,\
+                    path_effects=[outline])
 
-            # Loop over marker parameters (j)
-            j=0
-            for marker in symb:
-                if (i==j):
-                    ms = marker[0]*0.75
-                    mt = marker[1]
-                    mc = marker[2]
-                j+=1
-            mfg = flight[4]
-            motor = flight[3]
-            str1=r'%s %s'%(mfg,motor)
-            print str1
-            plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
-                markeredgewidth=1.5,markeredgecolor='k',\
-                markerfacecolor=mc,label='_nolegend_',marker=mt)
-            i+=1
+            # Loop over flights in data (i)
+            i=0
+            for flight in data:
 
-    [m,b,r,p,std]=sp.stats.linregress(x_all,y_all)
-    xfit=np.linspace(200,10200)
-    yfit=np.multiply(xfit,m)+b
+                # Loop over marker parameters (j)
+                j=0
+                for marker in symb:
+                    if (i==j):
+                        ms = marker[0]*0.75
+                        mt = marker[1]
+                        mc = marker[2]
+                    j+=1
+                mfg = flight[4]
+                motor = flight[3]
+                str1=r'%s %s'%(mfg,motor)
+                print str1
+                if (jj==1):
+                    plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+                        markeredgewidth=1.5,markeredgecolor='k',\
+                        markerfacecolor=mc,label='_nolegend_',marker=mt)
+                i+=1
 
-    str1=r'Y=%1.5f*X+%4.2f'%(m,b)
-    str2=r'r$^2$=%1.4f'%(r)
-    plt.text(1800,625,str1,fontsize=14,family=family,\
-        color='k',fontweight='bold')
-    plt.text(1800,550,str2,fontsize=14,family=family,\
-        color='k',fontweight='bold')
+    # legend location code.
+    # ========================
+    # 'best'..............0
+    # 'upper right'.......1
+    # 'upper left'........2
+    # 'lower left'........3
+    # 'lower right'.......4
+    # 'right'.............5
+    # 'center left'.......6
+    # 'center right'......7
+    # 'lower center'......8
+    # 'upper center'......9
+    # 'center'............10
+    #
+    loc=4
 
-    outline=mpe.withStroke(linewidth=4.0,foreground='black')
-    plt.plot(xfit,yfit,'k-',color=linecolor,linewidth=2.0,\
-        label=rlabel,\
-        path_effects=[outline],zorder=1)
+    legend = ax.legend(loc=loc,ncol=2,\
+        prop=matplotlib.font_manager.FontProperties(\
+            family=family,weight='bold',size=10),\
+        numpoints=1,fancybox=False,borderpad=0.5)
+    legend.get_frame().set_linewidth(1.5)
+    legend.get_frame().set_edgecolor("k")
 
     # save the image
     plt.tight_layout()
@@ -521,7 +496,6 @@ def FuelCost_ALL(fout,title):
 
     return []
 
-
 ###########################################################################
 ###########################################################################
 ###
@@ -529,7 +503,6 @@ def FuelCost_ALL(fout,title):
 ###
 ###########################################################################
 ###########################################################################
-    
-fout = 'Fuel_Cost'
-ttl = 'Reload Prices (2019)'
-FuelCost_ALL(fout,ttl)
+fout = 'Alt_Cost'
+ttl = 'Cost to Altitude'
+AltCost_ALL(fout,ttl,0.05889,35.28)
