@@ -6,10 +6,10 @@
 
 rm *.png
 python MasterPlots_v3.py
-python FuelCost_v1.py
+#python FuelCost_v1.py
 #gthumb Fuel_Cost.png &
 
-python AltCost_v1.py
+#python AltCost_v1.py
 #gthumb Alt_Cost.png &
 
 gthumb DarkStarJr_Alt.png &

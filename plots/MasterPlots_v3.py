@@ -163,22 +163,26 @@ def FlightLog_Intimidator4():
     ttl = r"Intimidator 4 (Kit Bash)"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt
-    data = [['Nov',  '1', '2014', 'M3400',  'CTI', 9994.5, 3400, 19035],\
+    dold = [['Nov',  '1', '2014', 'M3400',  'CTI', 9994.5, 3400, 19035],\
             ['Oct', '31', '2015', 'M1419',   'AT', 7755.5, 1419, 17449],\
-            #['Nov',  '5', '2016', 'M2400',   'AT', 7716.5, 2400, 13655],\
-            ['Mar', '10', '2018', 'M1101',  'CTI', 5197.6, 1101, 14698],\
-            ['Sep',  '1', '2019', 'M2020',  'CTI', 8429.4, 2020, 17319],\
-            ['Oct', '12', '2019', 'L1400', 'LOKI', 2850.6, 1400, 6727]]
+            ['Nov',  '5', '2016', 'M2400',   'AT', 7716.5, 2400, 13655],\
+            ['Sep',  '1', '2019', 'M2020',  'CTI', 8429.4, 2020, 17319]]
+
+    data = [['Mar', '10', '2018', 'M1101',  'CTI', 5197.6, 1101, 14698],\
+            ['Oct', '12', '2019', 'L1400', 'LOKI', 2850.6, 1400,  6727],\
+            ['Nov',  '9', '2019', 'L1040', 'LOKI', 3707.0, 1040,  9268]]
 
     # Marker size/type/color
-    symb = [[10, "o", "lightcyan"    ],\
+    sold = [[10, "o", "lightcyan"    ],\
             [10, "s", "ivory"        ],\
-            #[10, "s", "mediumblue"   ],\
-            [10, "o", "white"        ],\
-            [10, "o", "darkorange"   ],\
-            [12, "v", "floralwhite"  ]]
+            [10, "s", "mediumblue"   ],\
+            [10, "o", "darkorange"   ]]
 
-    return [ttl,data,symb]
+    symb = [[10, "o", "white"        ],\
+            [12, "v", "floralwhite"  ],\
+            [12, "v", "red"          ]]
+
+    return [ttl,data,symb,dold,sold]
 
 ###########################################################################
 # Gizmo XL DD by WildMan, Maiden Flight November 10, 2018.
@@ -1142,9 +1146,9 @@ def AltPlot_ALL(fout,title):
                 linecolor='black'
                 rlabel='Extreme Darkstar'
             if k==3:
-                [ttl,data,symb] = FlightLog_Intimidator4()
-                lb = 2000
-                ub = 10200
+                [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+                lb = 2500
+                ub = 5500
                 linecolor='orangered'
                 rlabel='Intimidator 4 (Kit Bash)'
             if k==4:
@@ -1197,6 +1201,43 @@ def AltPlot_ALL(fout,title):
                         markeredgewidth=1.5,markeredgecolor='k',\
                         markerfacecolor=mc,label='_nolegend_',marker=mt)
                 i+=1
+
+    # Extra Symbols.
+    [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+
+    nf=0
+    for flight in d2:
+        nf=nf+1
+    print "There are ",nf," flights in the databse."
+
+    xdat=np.zeros(nf)
+    ydat=np.zeros(nf)
+    i=0
+    for flight in d2:
+        xdat[i]=flight[5]
+        ydat[i]=flight[7]
+        i+=1
+
+    print 'xdat = ',xdat
+    print 'ydat = ',ydat
+
+    i=0
+    for flight in d2:
+        j=0
+        for marker in s2:
+            if (i==j):
+                ms = marker[0]*0.75
+                mt = marker[1]
+                mc = marker[2]
+            j+=1
+        mfg = flight[4]
+        motor = flight[3]
+        str1=r'%s %s'%(mfg,motor)
+        print str1
+        plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+            markeredgewidth=1.5,markeredgecolor='k',\
+            markerfacecolor=mc,label='_nolegend_',marker=mt)
+        i+=1
 
     # legend location code.
     # ========================
@@ -1255,9 +1296,9 @@ ub = 9000
 AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
 fout = 'Intmd4KB_Alt'
-[ttl,data,symb] = FlightLog_Intimidator4()
-lb = 2000
-ub = 10200
+[ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+lb = 2500
+ub = 5500
 AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
 fout = 'GizmoXLDD_Alt'
@@ -1265,5 +1306,5 @@ fout = 'GizmoXLDD_Alt'
 AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
 fout = 'Fleet_Alt'
-ttl = 'All My Rockets'
+ttl = 'Altimeter Flight Data'
 AltPlot_ALL(fout,ttl)
