@@ -11,7 +11,8 @@ import os
 import sys
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as mpe
 import matplotlib.font_manager as font_manager
@@ -63,7 +64,7 @@ import scipy.stats as sp
 def FlightLog_ExtremeDS():
 
     # Title
-    ttl = r"Extreme DarkStar (My L3)"
+    ttl = r"Extreme DarkStar (My L3) - Altimeter Data"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt (Known Flights Only)
     data = [['May',  '1', '2011', 'L1410',  'CTI', 4828.3, 1410, 10608],\
@@ -71,7 +72,8 @@ def FlightLog_ExtremeDS():
             ['Mar', '31', '2012', 'M3700',  'CTI', 6800.0, 3600, 15000],\
             ['n/a','/na',  'n/a', 'K1200',  'CTI', 2014.0, 1200,  5243],\
             ['Oct', '31', '2015', 'M2250',  'CTI', 5472.2, 2250, 12458],\
-            ['Aug', '30', '2019',  'K830', 'LOKI', 2287.0,  830,  4707]]
+            ['Aug', '30', '2019',  'K830', 'LOKI', 2287.0,  830,  4707],\
+            ['Jan', '11', '2020', 'L1030',  'CTI', 2787.9, 1030,  8057]]
 
     # Marker size/type/color
     symb = [[10, "o", "saddlebrown"  ],\
@@ -79,7 +81,8 @@ def FlightLog_ExtremeDS():
             [10, "o", "lightcyan"    ],\
             [10, "o", "lightcyan"    ],\
             [10, "o", "yellow"       ],\
-            [12, "v", "chocolate"    ]]
+            [12, "v", "chocolate"    ],\
+            [10, "o", "red"          ]]
 
     return [ttl,data,symb]
 
@@ -90,7 +93,7 @@ def FlightLog_ExtremeDS():
 def FlightLog_DSJrWM():
 
     # Title
-    ttl = r"DarkStar Junior by WildMan"
+    ttl = r"DarkStar Junior by WildMan - Altimeter Data"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt
     data = [['May', '13', '2017',  'I285',  'CTI',  510.1,  285,  4466],\
@@ -125,7 +128,7 @@ def FlightLog_DSJrWM():
 def FlightLog_Comp3WM():
 
     # Title
-    ttl = r"Competitor 3 by WildMan"
+    ttl = r"Competitor 3 by WildMan - Altimeter Data"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt
     data = [['Nov',  '2', '2013',  'K940',  'CTI', 1632.7,  940,  9200],\
@@ -160,7 +163,7 @@ def FlightLog_Comp3WM():
 def FlightLog_Intimidator4():
 
     # Title
-    ttl = r"Intimidator 4 (Kit Bash)"
+    ttl = r"Intimidator 4 (Kit Bash) - Altimeter Data"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt
     dold = [['Nov',  '1', '2014', 'M3400',  'CTI', 9994.5, 3400, 19035],\
@@ -191,7 +194,7 @@ def FlightLog_Intimidator4():
 def FlightLog_GizmoXLDD():
 
     # Title
-    ttl = r"Gizmo XL DD"
+    ttl = r"Gizmo XL DD - Altimeter Data"
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt (Known Flights Only)
     data = [['Nov', '10', '2018', 'M2080',  'CTI', 6827.3, 2080,  7163]]
@@ -242,7 +245,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     # Font
     for label in (ax.get_xticklabels()+ax.get_yticklabels()):
         label.set_fontname(family)
-        label.set_fontsize(26)
+        label.set_fontsize(10)
 
     # border position
     f.subplots_adjust(left=0.2,right=0.9,bottom=0.22,top=0.85)
@@ -299,15 +302,15 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     for line in ticklines:
         line.set_linewidth(2.0)
     for label in ticklabels:
-        label.set_fontsize(18)
+        label.set_fontsize(10)
 
     # set the text
-    ax.set_title(title,fontsize=18,weight='bold')
-    ax.set_ylabel(ytxt,fontsize=18,weight='bold')
-    ax.set_xlabel(xtxt,fontsize=18,weight='bold')
-    ax.set_xticklabels(xticks,fontsize=18,weight='bold',\
+    ax.set_title(title,fontsize=10,weight='bold')
+    ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+    ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+    ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
         rotation=45,ha='right')
-    ax.set_yticklabels(yticks,fontsize=18,weight='bold')
+    ax.set_yticklabels(yticks,fontsize=10,weight='bold')
 
     ##########################
     ### ADD YOUR DATA HERE ###
@@ -321,7 +324,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='mediumblue',label='_nolegend_')
-    plt.text(85.,1000,r'G',fontsize=14,family=family,\
+    plt.text(85.,1000,r'G',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # H-Range
@@ -330,7 +333,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='turquoise',label='_nolegend_')
-    plt.text(200.,1000,r'H',fontsize=14,family=family,\
+    plt.text(200.,1000,r'H',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # I-Range
@@ -339,7 +342,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='chartreuse',label='_nolegend_')
-    plt.text(0.5*(320.01+640.0),1000,r'I',fontsize=14,family=family,\
+    plt.text(0.5*(320.01+640.0),1000,r'I',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # J-Range
@@ -348,7 +351,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='gold',label='_nolegend_')
-    plt.text(0.5*(640.01+1280.0),1000,r'J',fontsize=14,family=family,\
+    plt.text(0.5*(640.01+1280.0),1000,r'J',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # K-Range
@@ -357,7 +360,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='orangered',label='_nolegend_')
-    plt.text(0.5*(1280.01+2000),1000,r'K',fontsize=14,family=family,\
+    plt.text(0.5*(1280.01+2000),1000,r'K',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # Flight Data
@@ -388,9 +391,9 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
 
     str1=r'Y=%1.2f*X+%4.0f'%(m,b)
     str2=r'r$^2$=%1.4f'%(r)
-    plt.text(1200,3500,str1,fontsize=14,family=family,\
+    plt.text(1200,3500,str1,fontsize=10,family=family,\
         color='k',fontweight='bold')
-    plt.text(1200,4800,str2,fontsize=14,family=family,\
+    plt.text(1200,4800,str2,fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     outline=mpe.withStroke(linewidth=5.0,foreground='k')
@@ -436,7 +439,7 @@ def AltPlot_GK(fout,title,data,symb,lb,ub):
 
     legend = ax.legend(loc=loc,ncol=4,\
         prop=matplotlib.font_manager.FontProperties(\
-            family=family,weight='bold',size=10),\
+            family=family,weight='bold',size=6),\
         numpoints=1,fancybox=False,borderpad=0.5)
     legend.get_frame().set_linewidth(1.5)
     legend.get_frame().set_edgecolor("k")
@@ -489,7 +492,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     # Font
     for label in (ax.get_xticklabels()+ax.get_yticklabels()):
         label.set_fontname(family)
-        label.set_fontsize(26)
+        label.set_fontsize(10)
 
     # border position
     f.subplots_adjust(left=0.2,right=0.9,bottom=0.22,top=0.85)
@@ -546,15 +549,15 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     for line in ticklines:
         line.set_linewidth(2.0)
     for label in ticklabels:
-        label.set_fontsize(18)
+        label.set_fontsize(10)
 
     # set the text
-    ax.set_title(title,fontsize=18,weight='bold')
-    ax.set_ylabel(ytxt,fontsize=18,weight='bold')
-    ax.set_xlabel(xtxt,fontsize=18,weight='bold')
-    ax.set_xticklabels(xticks,fontsize=18,weight='bold',\
+    ax.set_title(title,fontsize=10,weight='bold')
+    ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+    ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+    ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
         rotation=45,ha='right')
-    ax.set_yticklabels(yticks,fontsize=18,weight='bold')
+    ax.set_yticklabels(yticks,fontsize=10,weight='bold')
 
     ##########################
     ### ADD YOUR DATA HERE ###
@@ -568,7 +571,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='mediumblue',label='_nolegend_')
-    plt.text(175.,1000,r'H',fontsize=14,family=family,\
+    plt.text(175.,1000,r'H',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # I-Range
@@ -577,7 +580,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='turquoise',label='_nolegend_')
-    plt.text(0.5*(320.01+640.0),1000,r'I',fontsize=14,family=family,\
+    plt.text(0.5*(320.01+640.0),1000,r'I',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # J-Range
@@ -586,7 +589,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='chartreuse',label='_nolegend_')
-    plt.text(0.5*(640.01+1280.0),1000,r'J',fontsize=14,family=family,\
+    plt.text(0.5*(640.01+1280.0),1000,r'J',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # K-Range
@@ -595,7 +598,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='gold',label='_nolegend_')
-    plt.text(0.5*(1280.01+2560.0),1000,r'K',fontsize=14,family=family,\
+    plt.text(0.5*(1280.01+2560.0),1000,r'K',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # L-Range
@@ -604,7 +607,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='orangered',label='_nolegend_')
-    plt.text(0.5*(2560.01+3500),1000,r'L',fontsize=14,family=family,\
+    plt.text(0.5*(2560.01+3500),1000,r'L',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # Flight Data
@@ -635,9 +638,9 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
 
     str1=r'Y=%1.2f*X+%4.0f'%(m,b)
     str2=r'r$^2$=%1.4f'%(r)
-    plt.text(2000,3900,str1,fontsize=14,family=family,\
+    plt.text(2000,3900,str1,fontsize=10,family=family,\
         color='k',fontweight='bold')
-    plt.text(2000,5200,str2,fontsize=14,family=family,\
+    plt.text(2000,5200,str2,fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     outline=mpe.withStroke(linewidth=5.0,foreground='black')
@@ -683,7 +686,7 @@ def AltPlot_HL(fout,title,data,symb,lb,up):
 
     legend = ax.legend(loc=loc,ncol=4,\
         prop=matplotlib.font_manager.FontProperties(\
-            family=family,weight='bold',size=10),\
+            family=family,weight='bold',size=6),\
         numpoints=1,fancybox=False,borderpad=0.5)
     legend.get_frame().set_linewidth(1.5)
     legend.get_frame().set_edgecolor("k")
@@ -737,7 +740,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     # Font
     for label in (ax.get_xticklabels()+ax.get_yticklabels()):
         label.set_fontname(family)
-        label.set_fontsize(26)
+        label.set_fontsize(10)
 
     # border position
     f.subplots_adjust(left=0.2,right=0.9,bottom=0.2,top=0.85)
@@ -794,15 +797,15 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     for line in ticklines:
         line.set_linewidth(2.0)
     for label in ticklabels:
-        label.set_fontsize(18)
+        label.set_fontsize(10)
 
     # set the text
-    ax.set_title(title,fontsize=18,weight='bold')
-    ax.set_ylabel(ytxt,fontsize=18,weight='bold')
-    ax.set_xlabel(xtxt,fontsize=18,weight='bold')
-    ax.set_xticklabels(xticks,fontsize=18,weight='bold',\
+    ax.set_title(title,fontsize=10,weight='bold')
+    ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+    ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+    ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
         rotation=45,ha='right')
-    ax.set_yticklabels(yticks,fontsize=18,weight='bold')
+    ax.set_yticklabels(yticks,fontsize=10,weight='bold')
 
     ##########################
     ### ADD YOUR DATA HERE ###
@@ -816,7 +819,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='mediumblue',label='_nolegend_')
-    plt.text(0.5*(640.01+1100.0),1000,r'J',fontsize=14,family=family,\
+    plt.text(0.5*(640.01+1100.0),1000,r'J',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # K-Range
@@ -825,7 +828,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='turquoise',label='_nolegend_')
-    plt.text(0.5*(1280.01+2200.0),1000,r'K',fontsize=14,family=family,\
+    plt.text(0.5*(1280.01+2200.0),1000,r'K',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # L-Range
@@ -834,7 +837,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='chartreuse',label='_nolegend_')
-    plt.text(0.5*(2560.01+5000),1000,r'L',fontsize=14,family=family,\
+    plt.text(0.5*(2560.01+5000),1000,r'L',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # M-Range
@@ -843,7 +846,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='gold',label='_nolegend_')
-    plt.text(0.5*(5120.01+9440),1000,r'M',fontsize=14,family=family,\
+    plt.text(0.5*(5120.01+9440),1000,r'M',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # N-Range
@@ -852,7 +855,7 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='orangered',label='_nolegend_')
-    plt.text(0.5*(10240.01+11500),1000,r'N',fontsize=14,family=family,\
+    plt.text(0.5*(10240.01+11500),1000,r'N',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # Flight Data
@@ -885,9 +888,9 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
         str1=r'Y=%1.2f*X+%4.0f'%(m,b)
         str2=r'r$^2$=%1.4f'%(r)
 
-        plt.text(5500,4500,str1,fontsize=14,family=family,\
+        plt.text(5500,4500,str1,fontsize=10,family=family,\
             color='k',fontweight='bold')
-        plt.text(5500,6500,str2,fontsize=14,family=family,\
+        plt.text(5500,6500,str2,fontsize=10,family=family,\
             color='k',fontweight='bold')
 
         outline=mpe.withStroke(linewidth=5.0,foreground='black')
@@ -929,11 +932,11 @@ def AltPlot_JN(fout,title,data,symb,lb,ub):
     # 'upper center'......9
     # 'center'............10
     #
-    loc=2
+    loc=9
 
-    legend = ax.legend(loc=loc,ncol=2,\
+    legend = ax.legend(loc=loc,ncol=4,\
         prop=matplotlib.font_manager.FontProperties(\
-            family=family,weight='bold',size=10),\
+            family=family,weight='bold',size=6),\
         numpoints=1,fancybox=False,borderpad=0.5)
     legend.get_frame().set_linewidth(1.5)
     legend.get_frame().set_edgecolor("k")
@@ -1301,10 +1304,10 @@ lb = 2500
 ub = 5500
 AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
-fout = 'GizmoXLDD_Alt'
-[ttl,data,symb] = FlightLog_GizmoXLDD()
-AltPlot_JN(fout,ttl,data,symb,lb,ub)
+#fout = 'GizmoXLDD_Alt'
+#[ttl,data,symb] = FlightLog_GizmoXLDD()
+#AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
-fout = 'Fleet_Alt'
-ttl = 'Altimeter Flight Data'
-AltPlot_ALL(fout,ttl)
+#fout = 'Fleet_Alt'
+#ttl = 'Altimeter Flight Data'
+#AltPlot_ALL(fout,ttl)

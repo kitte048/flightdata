@@ -1,0 +1,246 @@
+###########################################################################
+# Altitude Plot (G-K Range, up to 2000 Ns)
+###########################################################################
+def AltPlot_GK(fout,title,data,symb,lb,ub):
+
+    # set titles
+    xtxt = r"Total Impulse (N-s)"
+    ytxt = r"Max Altitude AGL (ft)"
+
+    # axes limits
+    xmin = 0
+    xmax = 2000
+    ymin = 0
+    ymax = 16000
+
+    # axes tick settings
+    nx = 11
+    ny = 9
+    dx = (xmax-xmin)/(nx-1.0)
+    dy = (ymax-ymin)/(ny-1.0)
+    mx = 4
+    my = 4
+    xticks = [r"0",r"200",r"400",r"600",r"800",r"1000",r"1200",r"1400",\
+        r"1600",r"1800","2000"]
+    yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",\
+        r"10,000",r"12,000",r"14,000",r"16,000"]
+
+    # figure settings
+    figsize = (3,2.75)
+    dpi = 1000
+
+    # text settings
+    family = 'sans-serif'
+
+    # Open a new figure
+    fig = plt.figure(figsize=figsize,dpi=dpi)
+    f,ax = plt.subplots(1)
+    
+    # Font
+    for label in (ax.get_xticklabels()+ax.get_yticklabels()):
+        label.set_fontname(family)
+        label.set_fontsize(10)
+
+    # border position
+    f.subplots_adjust(left=0.2,right=0.9,bottom=0.22,top=0.85)
+
+    # move axes spines outward
+    ax.spines['left'].set_position(('outward',30))
+    ax.spines['bottom'].set_position(('outward',30))
+
+    # border visibiliy
+    ax.title.set_position([.5,1.07])
+    ax.grid(True)
+    ax.set_axisbelow(True)
+    ax.grid(b=True,which='major',color='chartreuse',\
+        linestyle='-',linewidth=1.0)
+    ax.grid(b=True,which='minor',color='lightseagreen',\
+        linestyle='-',linewidth=0.25)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['left'].set_visible(True)
+
+    # Axis padding
+    ax.get_xaxis().tick_bottom()
+    ax.xaxis.labelpad = 17
+    ax.get_yaxis().tick_left()
+    ax.yaxis.labelpad = 17
+
+    # border line width
+    ax.spines['top'].set_linewidth(2.0)
+    ax.spines['right'].set_linewidth(2.0)
+    ax.spines['bottom'].set_linewidth(2.0)
+    ax.spines['left'].set_linewidth(2.0)
+
+    # axes tick settings
+    ax.get_yaxis().set_tick_params(which='both',direction='in',pad=10,\
+        right='off',width=2.0)
+    ax.get_xaxis().set_tick_params(which='both',direction='in',pad=10,\
+        top='off',width=2.0)
+    ax.get_yaxis().set_tick_params(which='major',length=13.0,width=2.0)
+    ax.get_xaxis().set_tick_params(which='major',length=13.0,width=2.0)
+    ax.get_yaxis().set_tick_params(which='minor',length=7.0,width=2.0)
+    ax.get_xaxis().set_tick_params(which='minor',length=7.0,width=2.0)
+    ax.axis([xmin,xmax,ymin,ymax])
+    ax.xaxis.set_ticks(np.linspace(xmin,xmax,nx))
+    ax.yaxis.set_ticks(np.linspace(ymin,ymax,ny))
+    minorLocatorX = ticker.MultipleLocator(dx/mx)
+    minorLocatorY = ticker.MultipleLocator(dy/my)
+    ax.xaxis.set_minor_locator(minorLocatorX)
+    ax.yaxis.set_minor_locator(minorLocatorY)
+
+    # resize all ticks
+    ticklines = ax.get_xticklines()+ax.get_yticklines()
+    ticklabels = ax.get_xticklabels()+ax.get_yticklabels()
+    for line in ticklines:
+        line.set_linewidth(2.0)
+    for label in ticklabels:
+        label.set_fontsize(10)
+
+    # set the text
+    ax.set_title(title,fontsize=10,weight='bold')
+    ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+    ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+    ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
+        rotation=45,ha='right')
+    ax.set_yticklabels(yticks,fontsize=10,weight='bold')
+
+    ##########################
+    ### ADD YOUR DATA HERE ###
+    ##########################
+
+    # Make shaded regions for the different letters.
+
+    # G-Range
+    itot=np.linspace(80.01,160.0)
+    ylow=itot-1.e6
+    yhig=itot+1.e6
+    plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+        color='mediumblue',label='_nolegend_')
+    plt.text(85.,1000,r'G',fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    # H-Range
+    itot=np.linspace(160.01,320.0)
+    ylow=itot-1.e6
+    yhig=itot+1.e6
+    plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+        color='turquoise',label='_nolegend_')
+    plt.text(200.,1000,r'H',fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    # I-Range
+    itot=np.linspace(320.01,640.0)
+    ylow=itot-1.e6
+    yhig=itot+1.e6
+    plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+        color='chartreuse',label='_nolegend_')
+    plt.text(0.5*(320.01+640.0),1000,r'I',fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    # J-Range
+    itot=np.linspace(640.01,1280.0)
+    ylow=itot-1.e6
+    yhig=itot+1.e6
+    plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+        color='gold',label='_nolegend_')
+    plt.text(0.5*(640.01+1280.0),1000,r'J',fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    # K-Range
+    itot=np.linspace(1280.01,2560.0)
+    ylow=itot-1.e6
+    yhig=itot+1.e6
+    plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+        color='orangered',label='_nolegend_')
+    plt.text(0.5*(1280.01+2000),1000,r'K',fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    # Flight Data
+    nf=0
+    for flight in data:
+        nf=nf+1
+    print "There are ",nf," flights in the databse."
+
+    xdat=np.zeros(nf)
+    ydat=np.zeros(nf)
+    i=0
+    for flight in data:
+        xdat[i]=flight[5]
+        ydat[i]=flight[7]
+        i+=1
+
+    print 'xdat = ',xdat
+    print 'ydat = ',ydat
+
+    # Curve Fit
+    # slope, intercept, r_value, p_value, std_err
+    [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
+    print 'slope ',m
+    print 'intercept ',b
+    print 'r squared ',r
+    xfit=np.linspace(lb,ub)
+    yfit=np.multiply(xfit,m)+b
+
+    str1=r'Y=%1.2f*X+%4.0f'%(m,b)
+    str2=r'r$^2$=%1.4f'%(r)
+    plt.text(1200,3500,str1,fontsize=10,family=family,\
+        color='k',fontweight='bold')
+    plt.text(1200,4800,str2,fontsize=10,family=family,\
+        color='k',fontweight='bold')
+
+    outline=mpe.withStroke(linewidth=5.0,foreground='k')
+    plt.plot(xfit,yfit,'k-',color='orangered',linewidth=3.0,\
+        label=r'_nolegend_',\
+        path_effects=[outline])
+
+    # Scatter Plot (different symbols)
+    i=0
+    for flight in data:
+        j=0
+        for marker in symb:
+            if (i==j):
+                ms = marker[0]*0.75
+                mt = marker[1]
+                mc = marker[2]
+            j+=1
+        mfg = flight[4]
+        motor = flight[3]
+        str1=r'%s %s'%(mfg,motor)
+        print str1
+        plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+            markeredgewidth=1.5,markeredgecolor='k',\
+            markerfacecolor=mc,label=str1,marker=mt)
+        i+=1
+
+
+    # legend location code.
+    # ========================
+    # 'best'..............0
+    # 'upper right'.......1
+    # 'upper left'........2
+    # 'lower left'........3
+    # 'lower right'.......4
+    # 'right'.............5
+    # 'center left'.......6
+    # 'center right'......7
+    # 'lower center'......8
+    # 'upper center'......9
+    # 'center'............10
+    #
+    loc=9
+
+    legend = ax.legend(loc=loc,ncol=4,\
+        prop=matplotlib.font_manager.FontProperties(\
+            family=family,weight='bold',size=6),\
+        numpoints=1,fancybox=False,borderpad=0.5)
+    legend.get_frame().set_linewidth(1.5)
+    legend.get_frame().set_edgecolor("k")
+
+    # save the image
+    plt.tight_layout()
+    f.savefig(fout+'.png',format='png')
+    plt.clf()
+
+    return []
