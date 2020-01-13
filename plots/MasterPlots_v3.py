@@ -990,7 +990,7 @@ def AltPlot_ALL(fout,title):
     # Font
     for label in (ax.get_xticklabels()+ax.get_yticklabels()):
         label.set_fontname(family)
-        label.set_fontsize(26)
+        label.set_fontsize(10)
 
     # border position
     f.subplots_adjust(left=0.2,right=0.9,bottom=0.2,top=0.85)
@@ -1047,15 +1047,15 @@ def AltPlot_ALL(fout,title):
     for line in ticklines:
         line.set_linewidth(2.0)
     for label in ticklabels:
-        label.set_fontsize(18)
+        label.set_fontsize(10)
 
     # set the text
-    ax.set_title(title,fontsize=18,weight='bold')
-    ax.set_ylabel(ytxt,fontsize=18,weight='bold')
-    ax.set_xlabel(xtxt,fontsize=18,weight='bold')
-    ax.set_xticklabels(xticks,fontsize=18,weight='bold',\
+    ax.set_title(title,fontsize=10,weight='bold')
+    ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+    ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+    ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
         rotation=45,ha='right')
-    ax.set_yticklabels(yticks,fontsize=18,weight='bold')
+    ax.set_yticklabels(yticks,fontsize=10,weight='bold')
 
     ##########################
     ### ADD YOUR DATA HERE ###
@@ -1069,7 +1069,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='slategrey',label='_nolegend_')
-    plt.text(0.4*(320.01+640.0),22000,r'I',fontsize=14,family=family,\
+    plt.text(0.4*(320.01+640.0),1000,r'I',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # J-Range
@@ -1078,7 +1078,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='mediumblue',label='_nolegend_')
-    plt.text(0.5*(640.01+1100.0),22000,r'J',fontsize=14,family=family,\
+    plt.text(0.5*(640.01+1100.0),1000,r'J',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # K-Range
@@ -1087,7 +1087,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='turquoise',label='_nolegend_')
-    plt.text(0.5*(1280.01+2200.0),22000,r'K',fontsize=14,family=family,\
+    plt.text(0.5*(1280.01+2200.0),1000,r'K',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # L-Range
@@ -1096,7 +1096,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='chartreuse',label='_nolegend_')
-    plt.text(0.5*(2560.01+5000),22000,r'L',fontsize=14,family=family,\
+    plt.text(0.5*(2560.01+5000),1000,r'L',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # M-Range
@@ -1105,7 +1105,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='gold',label='_nolegend_')
-    plt.text(6500,22000,r'M',fontsize=14,family=family,\
+    plt.text(6500,1000,r'M',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # N-Range
@@ -1114,7 +1114,7 @@ def AltPlot_ALL(fout,title):
     yhig=itot+1.e6
     plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
         color='orangered',label='_nolegend_')
-    plt.text(0.5*(10240.01+11500),22000,r'N',fontsize=14,family=family,\
+    plt.text(0.5*(10240.01+11500),1000,r'N',fontsize=10,family=family,\
         color='k',fontweight='bold')
 
     # Scatter Plots (different symbols)
@@ -1256,11 +1256,11 @@ def AltPlot_ALL(fout,title):
     # 'upper center'......9
     # 'center'............10
     #
-    loc=4
+    loc=9
 
-    legend = ax.legend(loc=loc,ncol=2,\
+    legend = ax.legend(loc=loc,ncol=3,\
         prop=matplotlib.font_manager.FontProperties(\
-            family=family,weight='bold',size=10),\
+            family=family,weight='bold',size=6),\
         numpoints=1,fancybox=False,borderpad=0.5)
     legend.get_frame().set_linewidth(1.5)
     legend.get_frame().set_edgecolor("k")
@@ -1304,10 +1304,10 @@ lb = 2500
 ub = 5500
 AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
-#fout = 'GizmoXLDD_Alt'
-#[ttl,data,symb] = FlightLog_GizmoXLDD()
-#AltPlot_JN(fout,ttl,data,symb,lb,ub)
+fout = 'GizmoXLDD_Alt'
+[ttl,data,symb] = FlightLog_GizmoXLDD()
+AltPlot_JN(fout,ttl,data,symb,lb,ub)
 
-#fout = 'Fleet_Alt'
-#ttl = 'Altimeter Flight Data'
-#AltPlot_ALL(fout,ttl)
+fout = 'Fleet_Alt'
+ttl = 'All Rockets - Altimeter Data'
+AltPlot_ALL(fout,ttl)
