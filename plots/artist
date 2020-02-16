@@ -4,7 +4,11 @@
 #python MasterPlots_v3.py
 
 
-rm *.png
+#rm *.png
+#python NewLog_v1.py
+#gthumb NewLog_v1.png &
+
+
 python MasterPlots_v3.py
 #python FuelCost_v1.py
 #gthumb Fuel_Cost.png &

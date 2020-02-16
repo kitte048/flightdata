@@ -196,6 +196,7 @@ def FlightLog_Intimidator4():
             ['Sep',  '1', '2019', 'M2020',  'CTI', 8429.4, 2020, 17253,'SL1'],\
             ['Sep',  '1', '2019', '_nolegend_','', 8429.4, 2020, 17254,'SL3'],\
             ['Sep',  '1', '2019', '_nolegend_','', 8429.4, 2020, 17319,'JLA3']]
+
     data = [['Mar', '10', '2018', 'M1101',  'CTI', 5197.6, 1101, 14698,'SL2'],\
             ['Mar', '10', '2018', '_nolegend_','', 5197.6, 1101, 14620,'MAWD'],\
             ['Oct', '12', '2019', 'L1400', 'LOKI', 2850.6, 1400,  6727,'SL1'],\
@@ -214,6 +215,7 @@ def FlightLog_Intimidator4():
             [10, "o", "darkorange"   ],\
             [10, "o", "darkorange"   ],\
             [10, "o", "darkorange"   ]]
+
     symb = [[10, "o", "white"        ],\
             [10, "o", "white"        ],\
             [12, "v", "floralwhite"  ],\
@@ -235,11 +237,13 @@ def FlightLog_GizmoXLDD():
 
     # Month/Day/Year/Motor/Mfg/Itot/Fave/Alt/Altimeter
     data = [['Nov', '10', '2018', 'M2080',  'CTI', 6827.3, 2080,  7190,'SL1'],\
-            ['Nov', '10', '2018', '_nolegend_','', 6827.3, 2080,  7135,'MAWD']]
+            ['Nov', '10', '2018', '_nolegend_','', 6827.3, 2080,  7135,'MAWD'],\
+            ['Aug',  '1', '2020', 'N2000',   'AT',13347.1, 2000, 15233,'RSIM']]
 
     # Marker size/type/color
     symb = [[10, "o", "saddlebrown"  ],\
-            [10, "o", "saddlebrown"  ]]
+            [10, "o", "saddlebrown"  ],\
+            [10, "s", "ivory"        ]]
 
     return [ttl,data,symb]
 
@@ -250,5 +254,194 @@ def FlightLog_GizmoXLDD():
 ###
 ###########################################################################
 ###########################################################################
+
+# Plotting Impulse in Log Base 2 Scale...
+#
+# H-Range    160.01  -   320.0 (N-s)    160 * (2^0 to 2^1)  <==> xmin
+# I-Range    320.01  -   640.0          160 * (2^1 to 2^2)
+# J-Range    640.01  -  1280.0          160 * (2^2 to 2^3)
+# K-Range   1280.01  -  2560.0          160 * (2^3 to 2^4)
+# L-Range   2560.01  -  5120.0          160 * (2^4 to 2^5)
+# M-Range   5120.01  - 10240.0          160 * (2^5 to 2^6)
+# N-Range  10240.01  - 20480.0          160 * (2^6 to 2^7)  <==> xmax
+#
+# Conversion Equation is
+#                           0 = LOG[(160 / 160)] / LOG[2]
+#                           1 = LOG[(320 / 160)] / LOG[2]
+#                           2 = LOG[(640 / 160)] / LOG[2]
+#                           ...
+
+# figure name
+fout = 'NewLog_v1'
+
+# set titles
+title= r"Title."
+xtxt = r"Total Impulse (N-s)"
+ytxt = r"Max Altitude AGL (ft)"
+
+# axes limits
+xmin = 0
+xmax = 14000
+ymin = 0
+ymax = 24000
+
+# axes tick settings
+nx = 15
+ny = 13
+dx = (xmax-xmin)/(nx-1.0)
+dy = (ymax-ymin)/(ny-1.0)
+mx = 4
+my = 4
+xticks = [r"0",r"1000",r"2000",r"3000",r"4000",r"5000",r"6000",\
+    r"7000",r"8000",r"9000",r"10000",r"11000",r"12000",\
+    r"13000",r"14000"]
+yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",r"10,000",\
+    r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000",\
+    r"24,000"]
+
+# figure settings
+figsize = (4,2.75)
+dpi = 1000
+
+# text settings
+family = 'sans-serif'
+
+# Open a new figure
+fig = plt.figure(figsize=figsize,dpi=dpi)
+f,ax = plt.subplots(1)
+
+# Font
+for label in (ax.get_xticklabels()+ax.get_yticklabels()):
+    label.set_fontname(family)
+    label.set_fontsize(10)
+
+# border position
+f.subplots_adjust(left=0.2,right=0.9,bottom=0.2,top=0.85)
+
+# move axes spines outward
+ax.spines['left'].set_position(('outward',30.0))
+ax.spines['bottom'].set_position(('outward',30.0))
+
+# border visibiliy
+ax.title.set_position([.5,1.07])
+ax.grid(True)
+ax.set_axisbelow(True)
+ax.grid(b=True,which='major',color='chartreuse',\
+    linestyle='-',linewidth=0.5)
+ax.grid(b=True,which='minor',color='lightseagreen',\
+    linestyle='-',linewidth=0.25)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(True)
+ax.spines['left'].set_visible(True)
+
+# Axis padding
+ax.get_xaxis().tick_bottom()
+ax.xaxis.labelpad = 17
+ax.get_yaxis().tick_left()
+ax.yaxis.labelpad = 17
+
+# border line width
+ax.spines['top'].set_linewidth(1.0)
+ax.spines['right'].set_linewidth(1.0)
+ax.spines['bottom'].set_linewidth(1.0)
+ax.spines['left'].set_linewidth(1.0)
+
+# axes tick settings
+ax.get_yaxis().set_tick_params(which='both',direction='in',pad=10,\
+    right=False,width=1.0)
+ax.get_xaxis().set_tick_params(which='both',direction='in',pad=10,\
+    top=False,width=1.0)
+ax.get_yaxis().set_tick_params(which='major',length=13.0,width=1.0)
+ax.get_xaxis().set_tick_params(which='major',length=13.0,width=1.0)
+ax.get_yaxis().set_tick_params(which='minor',length=7.0,width=1.0)
+ax.get_xaxis().set_tick_params(which='minor',length=7.0,width=1.0)
+ax.axis([xmin,xmax,ymin,ymax])
+ax.xaxis.set_ticks(np.linspace(xmin,xmax,nx))
+ax.yaxis.set_ticks(np.linspace(ymin,ymax,ny))
+minorLocatorX = ticker.MultipleLocator(dx/mx)
+minorLocatorY = ticker.MultipleLocator(dy/my)
+ax.xaxis.set_minor_locator(minorLocatorX)
+ax.yaxis.set_minor_locator(minorLocatorY)
+
+# resize all ticks
+ticklines = ax.get_xticklines()+ax.get_yticklines()
+ticklabels = ax.get_xticklabels()+ax.get_yticklabels()
+for line in ticklines:
+    line.set_linewidth(1.0)
+for label in ticklabels:
+    label.set_fontsize(10)
+
+# set the text
+ax.set_title(title,fontsize=10,weight='bold')
+ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
+    rotation=45,ha='right')
+ax.set_yticklabels(yticks,fontsize=10,weight='bold')
+
+##########################
+### ADD YOUR DATA HERE ###
+##########################
+
+
+# Loop over rocket kits (k)
+for k in range(6):
+
+    if k==0:
+        [ttl,data,symb] = FlightLog_DSJrWM()
+    if k==1:
+        [ttl,data,symb] = FlightLog_Comp3WM()
+    if k==2:
+        [ttl,data,symb] = FlightLog_ExtremeDS()
+    if k==3:
+        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+        data=d2
+        symb=s2
+    if k==4:
+        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+    if k==5:
+        [ttl,data,symb] = FlightLog_GizmoXLDD()
+
+    # Flight Data
+    nf=0
+    for flight in data:
+        nf=nf+1
+    print "There are ",nf," flights in the databse."
+    xdat=np.zeros(nf)
+    ydat=np.zeros(nf)
+    ii=0
+    for flight in data:
+        xdat[ii]=flight[5]
+        ydat[ii]=flight[7]
+        ii+=1
+
+    # Loop over flights in data (i)
+    i=0
+    for flight in data:
+
+        # Loop over marker parameters (j)
+        j=0
+        for marker in symb:
+            if (i==j):
+                ms = marker[0]*0.75
+                mt = marker[1]
+                mc = marker[2]
+            j+=1
+        mfg = flight[4]
+        motor = flight[3]
+        str1=r'%s %s'%(mfg,motor)
+        print str1
+
+        plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+            markeredgewidth=1.5,markeredgecolor='k',\
+            markerfacecolor=mc,label='_nolegend_',marker=mt)
+
+        i+=1
+
+# save the image
+plt.tight_layout()
+f.savefig(fout+'.png',format='png')
+plt.clf()
 
 print "end of line."
