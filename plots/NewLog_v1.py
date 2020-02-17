@@ -12,8 +12,8 @@ import os
 import sys
 import numpy as np
 import matplotlib
-#matplotlib.use('TkAgg')
-matplotlib.use('Agg')
+matplotlib.use('TkAgg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as mpe
 import matplotlib.font_manager as font_manager
@@ -281,26 +281,34 @@ ytxt = r"Max Altitude AGL (ft)"
 
 # axes limits
 xmin = 0
-xmax = 14000
+xmax = 6
 ymin = 0
-ymax = 24000
+ymax = 22000
 
 # axes tick settings
-nx = 15
-ny = 13
+nx = 7
+ny = 12
 dx = (xmax-xmin)/(nx-1.0)
 dy = (ymax-ymin)/(ny-1.0)
-mx = 4
 my = 4
-xticks = [r"0",r"1000",r"2000",r"3000",r"4000",r"5000",r"6000",\
-    r"7000",r"8000",r"9000",r"10000",r"11000",r"12000",\
-    r"13000",r"14000"]
+xticks = ["320","640","1280","2560","5120","10240","20480"]
 yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",r"10,000",\
-    r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000",\
-    r"24,000"]
+    r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000"]
+
+# Base 2 math to place minor x-axis tick marks.
+mx=12
+lett=[320,640,1280,2560,5120,10240,20480]
+xminor=np.zeros(mx*len(lett)+1)
+jj=0
+for ll in lett:
+    for ii in range(mx):
+        xminor[jj] = ll+ll*ii/mx
+        jj+=1
+xminor[-1]=2*lett[-1]
+xminor=np.log(np.divide(xminor,320.0))/np.log(2.0)
 
 # figure settings
-figsize = (4,2.75)
+figsize = (11,9)
 dpi = 1000
 
 # text settings
@@ -359,7 +367,7 @@ ax.get_xaxis().set_tick_params(which='minor',length=7.0,width=1.0)
 ax.axis([xmin,xmax,ymin,ymax])
 ax.xaxis.set_ticks(np.linspace(xmin,xmax,nx))
 ax.yaxis.set_ticks(np.linspace(ymin,ymax,ny))
-minorLocatorX = ticker.MultipleLocator(dx/mx)
+minorLocatorX = matplotlib.ticker.FixedLocator(xminor)
 minorLocatorY = ticker.MultipleLocator(dy/my)
 ax.xaxis.set_minor_locator(minorLocatorX)
 ax.yaxis.set_minor_locator(minorLocatorY)
@@ -384,60 +392,150 @@ ax.set_yticklabels(yticks,fontsize=10,weight='bold')
 ### ADD YOUR DATA HERE ###
 ##########################
 
+# I-Range
+itot=np.linspace(0,1)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='slategrey',label='_nolegend_')
+plt.text(0.5,1000,r'I',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-# Loop over rocket kits (k)
-for k in range(6):
+# J-Range
+itot=np.linspace(1,2)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='mediumblue',label='_nolegend_')
+plt.text(1.5,1000,r'J',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-    if k==0:
-        [ttl,data,symb] = FlightLog_DSJrWM()
-    if k==1:
-        [ttl,data,symb] = FlightLog_Comp3WM()
-    if k==2:
-        [ttl,data,symb] = FlightLog_ExtremeDS()
-    if k==3:
-        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
-        data=d2
-        symb=s2
-    if k==4:
-        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
-    if k==5:
-        [ttl,data,symb] = FlightLog_GizmoXLDD()
+# K-Range
+itot=np.linspace(2,3)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='turquoise',label='_nolegend_')
+plt.text(2.5,1000,r'K',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-    # Flight Data
-    nf=0
-    for flight in data:
-        nf=nf+1
-    print "There are ",nf," flights in the databse."
-    xdat=np.zeros(nf)
-    ydat=np.zeros(nf)
-    ii=0
-    for flight in data:
-        xdat[ii]=flight[5]
-        ydat[ii]=flight[7]
-        ii+=1
+# L-Range
+itot=np.linspace(3,4)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='chartreuse',label='_nolegend_')
+plt.text(3.5,1000,r'L',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-    # Loop over flights in data (i)
-    i=0
-    for flight in data:
+# M-Range
+itot=np.linspace(4,5)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='gold',label='_nolegend_')
+plt.text(4.5,1000,r'M',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-        # Loop over marker parameters (j)
-        j=0
-        for marker in symb:
-            if (i==j):
-                ms = marker[0]*0.75
-                mt = marker[1]
-                mc = marker[2]
-            j+=1
-        mfg = flight[4]
-        motor = flight[3]
-        str1=r'%s %s'%(mfg,motor)
-        print str1
+# N-Range
+itot=np.linspace(5,6)
+ylow=itot-1.e6
+yhig=itot+1.e6
+plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
+    color='orangered',label='_nolegend_')
+plt.text(5.5,1000,r'N',fontsize=10,family=family,\
+    color='k',fontweight='bold')
 
-        plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
-            markeredgewidth=1.5,markeredgecolor='k',\
-            markerfacecolor=mc,label='_nolegend_',marker=mt)
+# Loop twice over all flight data
+#   jj=0 linear regression
+#   jj=1 scatter plots
+#
+for jj in range(2):
 
-        i+=1
+    # Loop over rocket kits (k)
+    for k in range(6):
+
+        if k==0:
+            [ttl,data,symb] = FlightLog_DSJrWM()
+            lb = np.log(400./320.)/np.log(2.)
+            ub = np.log(1600./320.)/np.log(2.)
+            linecolor='red'
+            rlabel='Darkstar Jr.'
+        if k==1:
+            [ttl,data,symb] = FlightLog_Comp3WM()
+            lb = np.log(600/320)/np.log(2)
+            ub = np.log(2600/320)/np.log(2)
+            linecolor='black'
+            rlabel='Competitor 3'
+        if k==2:
+            [ttl,data,symb] = FlightLog_ExtremeDS()
+            lb = np.log(1600/320)/np.log(2)
+            ub = np.log(9000/320)/np.log(2)
+            linecolor='darkgoldenrod'
+            rlabel='Extreme Darkstar'
+        if k==3:
+            [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+            lb = np.log(2500/320)/np.log(2)
+            ub = np.log(5500/320)/np.log(2)
+            linecolor='orangered'
+            rlabel='Intimidator 4'
+        if k==4:
+            [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+            data=d2
+            symb=s2
+        if k==5:
+            [ttl,data,symb] = FlightLog_GizmoXLDD()
+            lb = np.log(2500/320)/np.log(2)
+            ub = np.log(5500/320)/np.log(2)
+            linecolor='teal'
+            rlabel='GizmoXL DD'
+
+        # Flight Data
+        nf=0
+        for flight in data:
+            nf=nf+1
+        print "There are ",nf," flights in the databse."
+        xdat=np.zeros(nf)
+        ydat=np.zeros(nf)
+        ii=0
+        for flight in data:
+            xdat[ii]=np.log(flight[5]/320.0)/np.log(2.0)
+            ydat[ii]=flight[7]
+            ii+=1
+
+        # Curve Fit
+        # slope, intercept, r_value, p_value, std_err
+        if nf>1 and jj==0:
+            [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
+            xfit=np.linspace(lb,ub)
+            yfit=np.multiply(xfit,m)+b
+
+            outline=mpe.withStroke(linewidth=4.0,foreground='black')
+            plt.plot(xfit,yfit,'k-',color='w',linewidth=2.0,\
+                label=rlabel,\
+                path_effects=[outline])
+
+        # Loop over flights in data (i)
+        i=0
+        for flight in data:
+
+            # Loop over marker parameters (j)
+            j=0
+            for marker in symb:
+                if (i==j):
+                    ms = marker[0]*0.5
+                    mt = marker[1]
+                    mc = marker[2]
+                j+=1
+            mfg = flight[4]
+            motor = flight[3]
+            str1=r'%s %s'%(mfg,motor)
+            print str1
+            if (jj==1):
+                plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+                    markeredgewidth=1.5,markeredgecolor='k',\
+                    markerfacecolor='w',label='_nolegend_',marker=mt)
+            i+=1
 
 # save the image
 plt.tight_layout()

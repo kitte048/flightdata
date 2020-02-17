@@ -5,18 +5,18 @@
 
 
 #rm *.png
-#python NewLog_v1.py
-#gthumb NewLog_v1.png &
+python NewLog_v1.py
+gthumb NewLog_v1.png &
 
 
-python MasterPlots_v3.py
+#python MasterPlots_v3.py
 #python FuelCost_v1.py
 #gthumb Fuel_Cost.png &
 
 #python AltCost_v1.py
 #gthumb Alt_Cost.png &
 
-gthumb DarkStarJr_Alt.png &
+#gthumb DarkStarJr_Alt.png &
 #python MasterLogX_v1.py
 #gthumb Fleet_Alt.png &
 
