@@ -275,8 +275,8 @@ def FlightLog_GizmoXLDD():
 fout = 'NewLog_v1'
 
 # set titles
-title= r"Title."
-xtxt = r"Total Impulse (N-s)"
+title= r"Electronic Flight Data"
+xtxt = r"Log Base 2 of [ Total Impulse (N-s) ]"
 ytxt = r"Max Altitude AGL (ft)"
 
 # axes limits
@@ -290,13 +290,13 @@ nx = 7
 ny = 12
 dx = (xmax-xmin)/(nx-1.0)
 dy = (ymax-ymin)/(ny-1.0)
-my = 4
+mx = 4
+my = 2
 xticks = ["320","640","1280","2560","5120","10240","20480"]
 yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",r"10,000",\
     r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000"]
 
 # Base 2 math to place minor x-axis tick marks.
-mx=12
 lett=[320,640,1280,2560,5120,10240,20480]
 xminor=np.zeros(mx*len(lett)+1)
 jj=0
@@ -458,25 +458,25 @@ for jj in range(2):
         if k==0:
             [ttl,data,symb] = FlightLog_DSJrWM()
             lb = np.log(400./320.)/np.log(2.)
-            ub = np.log(1600./320.)/np.log(2.)
+            ub = np.log(1800./320.)/np.log(2.)
             linecolor='red'
             rlabel='Darkstar Jr.'
         if k==1:
             [ttl,data,symb] = FlightLog_Comp3WM()
-            lb = np.log(600/320)/np.log(2)
-            ub = np.log(2600/320)/np.log(2)
+            lb = np.log(600./320.)/np.log(2.)
+            ub = np.log(3000./320.)/np.log(2.)
             linecolor='black'
             rlabel='Competitor 3'
         if k==2:
             [ttl,data,symb] = FlightLog_ExtremeDS()
-            lb = np.log(1600/320)/np.log(2)
-            ub = np.log(9000/320)/np.log(2)
+            lb = np.log(1600./320.)/np.log(2.)
+            ub = np.log(9600./320.)/np.log(2.)
             linecolor='darkgoldenrod'
             rlabel='Extreme Darkstar'
         if k==3:
             [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
-            lb = np.log(2500/320)/np.log(2)
-            ub = np.log(5500/320)/np.log(2)
+            lb = np.log(2500./320.)/np.log(2.)
+            ub = np.log(6000./320.)/np.log(2.)
             linecolor='orangered'
             rlabel='Intimidator 4'
         if k==4:
@@ -485,8 +485,8 @@ for jj in range(2):
             symb=s2
         if k==5:
             [ttl,data,symb] = FlightLog_GizmoXLDD()
-            lb = np.log(2500/320)/np.log(2)
-            ub = np.log(5500/320)/np.log(2)
+            lb = np.log(6000./320.)/np.log(2.)
+            ub = np.log(15360./320.)/np.log(2.)
             linecolor='teal'
             rlabel='GizmoXL DD'
 
@@ -505,13 +505,13 @@ for jj in range(2):
 
         # Curve Fit
         # slope, intercept, r_value, p_value, std_err
-        if nf>1 and jj==0:
+        if nf>1 and jj==0 and k!=4:
             [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
             xfit=np.linspace(lb,ub)
             yfit=np.multiply(xfit,m)+b
 
-            outline=mpe.withStroke(linewidth=4.0,foreground='black')
-            plt.plot(xfit,yfit,'k-',color='w',linewidth=2.0,\
+            outline=mpe.withStroke(linewidth=3.0,foreground='black')
+            plt.plot(xfit,yfit,'k-',color=linecolor,linewidth=1.75,\
                 label=rlabel,\
                 path_effects=[outline])
 
@@ -534,8 +534,31 @@ for jj in range(2):
             if (jj==1):
                 plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
                     markeredgewidth=1.5,markeredgecolor='k',\
-                    markerfacecolor='w',label='_nolegend_',marker=mt)
+                    markerfacecolor=mc,label='_nolegend_',marker=mt)
             i+=1
+
+# legend location code.
+# ========================
+# 'best'..............0
+# 'upper right'.......1
+# 'upper left'........2
+# 'lower left'........3
+# 'lower right'.......4
+# 'right'.............5
+# 'center left'.......6
+# 'center right'......7
+# 'lower center'......8
+# 'upper center'......9
+# 'center'............10
+#
+loc=2
+
+legend = ax.legend(loc=loc,ncol=1,\
+    prop=matplotlib.font_manager.FontProperties(\
+        family=family,weight='bold',size=8),\
+    numpoints=1,fancybox=False,borderpad=0.5)
+legend.get_frame().set_linewidth(1.5)
+legend.get_frame().set_edgecolor("k")
 
 # save the image
 plt.tight_layout()
