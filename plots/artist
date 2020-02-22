@@ -5,8 +5,8 @@
 
 
 #rm *.png
-python NewLog_v1.py
-gthumb NewLog_v1.png &
+python NewLog_v2.py
+gthumb NewLog_v2.png &
 
 
 #python MasterPlots_v3.py

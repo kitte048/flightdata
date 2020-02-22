@@ -272,11 +272,11 @@ def FlightLog_GizmoXLDD():
 #                           ...
 
 # figure name
-fout = 'NewLog_v1'
+fout = 'NewLog_v2'
 
 # set titles
-title= r"Electronic Flight Data"
-xtxt = r"Log Total Impulse (N-s) in Base 2"
+title= r"Electronic Flight Data (2011-Present)"
+xtxt = r"Total Impulse (N-s) on Log Scale Base 2"
 ytxt = r"Max Altitude AGL (ft)"
 
 # axes limits
@@ -457,26 +457,26 @@ for jj in range(2):
 
         if k==0:
             [ttl,data,symb] = FlightLog_DSJrWM()
-            lb = np.log(450./320.)/np.log(2.)
-            ub = np.log(1800./320.)/np.log(2.)
+            lb = 450.
+            ub = 1800.
             linecolor='red'
             rlabel='Darkstar Jr.'
         if k==1:
             [ttl,data,symb] = FlightLog_Comp3WM()
-            lb = np.log(700./320.)/np.log(2.)
-            ub = np.log(2500./320.)/np.log(2.)
+            lb = 700.
+            ub = 2500.
             linecolor='black'
             rlabel='Competitor 3'
         if k==2:
             [ttl,data,symb] = FlightLog_ExtremeDS()
-            lb = np.log(1900./320.)/np.log(2.)
-            ub = np.log(9600./320.)/np.log(2.)
+            lb = 1900.
+            ub = 9600.
             linecolor='darkgoldenrod'
             rlabel='Extreme Darkstar'
         if k==3:
             [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
-            lb = np.log(2700./320.)/np.log(2.)
-            ub = np.log(5800./320.)/np.log(2.)
+            lb = 2700.
+            ub = 5800.
             linecolor='orangered'
             rlabel='Intimidator 4'
         if k==4:
@@ -485,8 +485,8 @@ for jj in range(2):
             symb=s2
         if k==5:
             [ttl,data,symb] = FlightLog_GizmoXLDD()
-            lb = np.log(6000./320.)/np.log(2.)
-            ub = np.log(15360./320.)/np.log(2.)
+            lb = 6000.
+            ub = 15360.
             linecolor='teal'
             rlabel='GizmoXL DD'
 
@@ -495,10 +495,12 @@ for jj in range(2):
         for flight in data:
             nf=nf+1
         print "There are ",nf," flights in the databse."
+        xlin=np.zeros(nf)
         xdat=np.zeros(nf)
         ydat=np.zeros(nf)
         ii=0
         for flight in data:
+            xlin[ii]=flight[5]
             xdat[ii]=np.log(flight[5]/320.0)/np.log(2.0)
             ydat[ii]=flight[7]
             ii+=1
@@ -506,9 +508,10 @@ for jj in range(2):
         # Curve Fit
         # slope, intercept, r_value, p_value, std_err
         if nf>1 and jj==0 and k!=4:
-            [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
+            [m,b,r,p,std]=sp.stats.linregress(xlin,ydat)
             xfit=np.linspace(lb,ub)
             yfit=np.multiply(xfit,m)+b
+            xfit=np.log(np.divide(xfit,320.))/np.log(2.0)
 
             outline=mpe.withStroke(linewidth=3.0,foreground='black')
             plt.plot(xfit,yfit,'k-',color=linecolor,linewidth=1.75,\
