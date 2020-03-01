@@ -276,7 +276,7 @@ fout = 'NewLog_v2'
 
 # set titles
 title= r"Electronic Flight Data (2011-Present)"
-xtxt = r"Total Impulse (N-s) on Log Scale Base 2"
+xtxt = r"Total Impulse (N-s)"
 ytxt = r"Max Altitude AGL (ft)"
 
 # axes limits
@@ -398,7 +398,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='slategrey',label='_nolegend_')
-plt.text(0.5,1000,r'I',fontsize=10,family=family,\
+plt.text(0.5,-1500,r'I',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # J-Range
@@ -407,7 +407,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='mediumblue',label='_nolegend_')
-plt.text(1.5,1000,r'J',fontsize=10,family=family,\
+plt.text(1.5,-1500,r'J',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # K-Range
@@ -416,7 +416,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='turquoise',label='_nolegend_')
-plt.text(2.5,1000,r'K',fontsize=10,family=family,\
+plt.text(2.5,-1500,r'K',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # L-Range
@@ -425,7 +425,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='chartreuse',label='_nolegend_')
-plt.text(3.5,1000,r'L',fontsize=10,family=family,\
+plt.text(3.5,-1500,r'L',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # M-Range
@@ -434,7 +434,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='gold',label='_nolegend_')
-plt.text(4.5,1000,r'M',fontsize=10,family=family,\
+plt.text(4.5,-1500,r'M',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # N-Range
@@ -443,7 +443,7 @@ ylow=itot-1.e6
 yhig=itot+1.e6
 plt.fill_between(itot,yhig,ylow,interpolate=True,alpha=0.5,\
     color='orangered',label='_nolegend_')
-plt.text(5.5,1000,r'N',fontsize=10,family=family,\
+plt.text(5.5,-1500,r'N',fontsize=10,family=family,\
     color='k',fontweight='bold')
 
 # Loop twice over all flight data
@@ -495,26 +495,30 @@ for jj in range(2):
         for flight in data:
             nf=nf+1
         print "There are ",nf," flights in the databse."
-        xlin=np.zeros(nf)
         xdat=np.zeros(nf)
         ydat=np.zeros(nf)
+        yagl=np.zeros(nf)
         ii=0
         for flight in data:
-            xlin[ii]=flight[5]
             xdat[ii]=np.log(flight[5]/320.0)/np.log(2.0)
-            ydat[ii]=flight[7]
+            ydat[ii]=np.log(flight[7]/1000.0)/np.log(2.0)
+            yagl[ii]=flight[7]
             ii+=1
 
-        # Curve Fit
+        # Curve Fit in Log-Log Coordinates
         # slope, intercept, r_value, p_value, std_err
         if nf>1 and jj==0 and k!=4:
-            [m,b,r,p,std]=sp.stats.linregress(xlin,ydat)
-            xfit=np.linspace(lb,ub)
+            [m,b,r,p,std]=sp.stats.linregress(xdat,ydat)
+            lb2=np.log(lb/320.)/np.log(2.0)
+            ub2=np.log(ub/320.)/np.log(2.0) 
+            xfit=np.linspace(lb2,ub2)
             yfit=np.multiply(xfit,m)+b
-            xfit=np.log(np.divide(xfit,320.))/np.log(2.0)
+
+            # Map back to linear altitude AGL.
+            yout=1000.*np.exp(np.multiply(yfit,np.log(2.0)))
 
             outline=mpe.withStroke(linewidth=3.0,foreground='black')
-            plt.plot(xfit,yfit,'k-',color=linecolor,linewidth=1.75,\
+            plt.plot(xfit,yout,'k-',color=linecolor,linewidth=1.75,\
                 label=rlabel,\
                 path_effects=[outline])
 
@@ -535,7 +539,7 @@ for jj in range(2):
             str1=r'%s %s'%(mfg,motor)
             print str1
             if (jj==1):
-                plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+                plt.plot(xdat[i],yagl[i],'ko',markersize=ms,\
                     markeredgewidth=1.5,markeredgecolor='k',\
                     markerfacecolor=mc,label='_nolegend_',marker=mt)
             i+=1
@@ -557,6 +561,216 @@ for jj in range(2):
 loc=2
 
 legend = ax.legend(loc=loc,ncol=1,\
+    prop=matplotlib.font_manager.FontProperties(\
+        family=family,weight='bold',size=8),\
+    numpoints=1,fancybox=False,borderpad=0.5)
+legend.get_frame().set_linewidth(0.5)
+legend.get_frame().set_edgecolor("k")
+
+# save the image
+plt.tight_layout()
+f.savefig(fout+'.png',format='png')
+plt.clf()
+
+###########################################################################
+###########################################################################
+###
+### Another plot just for the motor legend...
+###
+###########################################################################
+###########################################################################
+
+# figure name
+fout = 'NewLegend'
+
+# set titles
+title= r"Motor Legend"
+xtxt = r" "
+ytxt = r" "
+
+# axes limits
+xmin = 0
+xmax = 6
+ymin = 0
+ymax = 22000
+
+# axes tick settings
+nx = 7
+ny = 12
+dx = (xmax-xmin)/(nx-1.0)
+dy = (ymax-ymin)/(ny-1.0)
+mx = 4
+my = 2
+xticks = ["320","640","1280","2560","5120","10240","20480"]
+yticks = [r"0",r"2,000",r"4,000",r"6,000",r"8,000",r"10,000",\
+    r"12,000",r"14,000",r"16,000",r"18,000",r"20,000",r"22,000"]
+
+# Base 2 math to place minor x-axis tick marks.
+lett=[320,640,1280,2560,5120,10240,20480]
+xminor=np.zeros(mx*len(lett)+1)
+jj=0
+for ll in lett:
+    for ii in range(mx):
+        xminor[jj] = ll+ll*ii/mx
+        jj+=1
+xminor[-1]=2*lett[-1]
+xminor=np.log(np.divide(xminor,320.0))/np.log(2.0)
+
+# figure settings
+figsize = (11,9)
+dpi = 1000
+
+# text settings
+family = 'sans-serif'
+
+# Open a new figure
+fig = plt.figure(figsize=figsize,dpi=dpi)
+f,ax = plt.subplots(1)
+
+# Font
+for label in (ax.get_xticklabels()+ax.get_yticklabels()):
+    label.set_fontname(family)
+    label.set_fontsize(10)
+
+# border position
+f.subplots_adjust(left=0.02,right=0.9,bottom=0.2,top=0.85)
+
+# move axes spines outward
+ax.spines['left'].set_position(('outward',3.0))
+ax.spines['bottom'].set_position(('outward',3.0))
+
+# border visibiliy
+ax.title.set_position([.5,1.07])
+ax.grid(False)
+ax.set_axisbelow(True)
+ax.grid(b=True,which='major',color='w',\
+    linestyle='-',linewidth=0.5)
+ax.grid(b=True,which='minor',color='w',\
+    linestyle='-',linewidth=0.25)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+
+# Axis padding
+ax.get_xaxis().tick_bottom()
+ax.xaxis.labelpad = 1
+ax.get_yaxis().tick_left()
+ax.yaxis.labelpad = 1
+
+# border line width
+ax.spines['top'].set_linewidth(1.0)
+ax.spines['right'].set_linewidth(1.0)
+ax.spines['bottom'].set_linewidth(1.0)
+ax.spines['left'].set_linewidth(1.0)
+
+# axes tick settings
+ax.get_yaxis().set_tick_params(which='both',direction='in',pad=10,\
+    right=False,left=False,width=1.0)
+ax.get_xaxis().set_tick_params(which='both',direction='in',pad=10,\
+    top=False,bottom=False,width=1.0)
+ax.get_yaxis().set_tick_params(which='major',length=13.0,width=1.0)
+ax.get_xaxis().set_tick_params(which='major',length=13.0,width=1.0)
+ax.get_yaxis().set_tick_params(which='minor',length=7.0,width=1.0)
+ax.get_xaxis().set_tick_params(which='minor',length=7.0,width=1.0)
+ax.axis([xmin,xmax,ymin,ymax])
+ax.xaxis.set_ticks(np.linspace(xmin,xmax,nx))
+ax.yaxis.set_ticks(np.linspace(ymin,ymax,ny))
+minorLocatorX = matplotlib.ticker.FixedLocator(xminor)
+minorLocatorY = ticker.MultipleLocator(dy/my)
+ax.xaxis.set_minor_locator(minorLocatorX)
+ax.yaxis.set_minor_locator(minorLocatorY)
+
+# resize all ticks
+ticklines = ax.get_xticklines()+ax.get_yticklines()
+ticklabels = ax.get_xticklabels()+ax.get_yticklabels()
+for line in ticklines:
+    line.set_linewidth(1.0)
+for label in ticklabels:
+    label.set_fontsize(10)
+
+# set the text
+ax.set_title(title,fontsize=10,weight='bold')
+ax.set_ylabel(ytxt,fontsize=10,weight='bold')
+ax.set_xlabel(xtxt,fontsize=10,weight='bold')
+ax.set_xticklabels(xticks,fontsize=10,weight='bold',\
+    rotation=45,ha='right',color='w')
+ax.set_yticklabels(yticks,fontsize=10,weight='bold',color='w')
+
+##########################
+### ADD YOUR DATA HERE ###
+##########################
+
+# Loop over rocket kits (k)
+for k in range(6):
+
+    if k==0:
+        [ttl,data,symb] = FlightLog_DSJrWM()
+    if k==1:
+        [ttl,data,symb] = FlightLog_Comp3WM()
+    if k==2:
+        [ttl,data,symb] = FlightLog_ExtremeDS()
+    if k==3:
+        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+    if k==4:
+        [ttl,data,symb,d2,s2] = FlightLog_Intimidator4()
+        data=d2
+        symb=s2
+    if k==5:
+        [ttl,data,symb] = FlightLog_GizmoXLDD()
+
+    # Flight Data
+    nf=0
+    for flight in data:
+        nf=nf+1
+    print "There are ",nf," flights in the databse."
+    xdat=np.zeros(nf)
+    ydat=np.zeros(nf)
+    ii=0
+    for flight in data:
+        xdat[ii]=-99.e99
+        ydat[ii]=-99.e99
+        ii+=1
+
+    # Loop over flights in data (i)
+    i=0
+    for flight in data:
+
+        # Loop over marker parameters (j)
+        j=0
+        for marker in symb:
+            if (i==j):
+                ms = marker[0]*0.5
+                mt = marker[1]
+                mc = marker[2]
+            j+=1
+        mfg = flight[4]
+        motor = flight[3]
+        str1=r'%s %s'%(mfg,motor)
+        print str1
+        if (motor!="_nolegend_"):
+            plt.plot(xdat[i],ydat[i],'ko',markersize=ms,\
+                markeredgewidth=1.5,markeredgecolor='k',\
+                markerfacecolor=mc,label=str1,marker=mt)
+        i+=1
+
+# legend location code.
+# ========================
+# 'best'..............0
+# 'upper right'.......1
+# 'upper left'........2
+# 'lower left'........3
+# 'lower right'.......4
+# 'right'.............5
+# 'center left'.......6
+# 'center right'......7
+# 'lower center'......8
+# 'upper center'......9
+# 'center'............10
+#
+loc=9
+
+legend = ax.legend(loc=loc,ncol=3,\
     prop=matplotlib.font_manager.FontProperties(\
         family=family,weight='bold',size=8),\
     numpoints=1,fancybox=False,borderpad=0.5)
